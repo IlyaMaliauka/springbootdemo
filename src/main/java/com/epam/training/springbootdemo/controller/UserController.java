@@ -74,7 +74,7 @@ public class UserController {
                           @ModelAttribute("user") User user) {
         try {
             User newUser = userService.save(user);
-            return "redirect:/users/" + String.valueOf(newUser.getId());
+            return "redirect:/users/" + newUser.getId();
         } catch (Exception ex) {
             String errorMessage = ex.getMessage();
             log.error(errorMessage);
@@ -105,7 +105,7 @@ public class UserController {
         try {
             user.setId(userId);
             userService.update(user);
-            return "redirect:/users/" + String.valueOf(user.getId());
+            return "redirect:/users/" + user.getId();
         } catch (Exception ex) {
             String errorMessage = ex.getMessage();
             log.error(errorMessage);

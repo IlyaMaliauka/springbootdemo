@@ -10,7 +10,6 @@ import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Pageable;
 import org.springframework.data.domain.Sort;
 import org.springframework.stereotype.Service;
-import org.springframework.util.StringUtils;
 
 @Service
 public class UserService {
@@ -35,12 +34,6 @@ public class UserService {
     }
 
     public User save(User user) throws Exception {
-        if (StringUtils.isEmpty(user.getName())) {
-            throw new Exception("Name is required");
-        }
-        if (StringUtils.isEmpty(user.getEmail())) {
-            throw new Exception("Email is required");
-        }
         if (user.getId() != null && existsById(user.getId())) {
             throw new Exception("User with id: " + user.getId() + " already exists");
         }
@@ -48,12 +41,6 @@ public class UserService {
     }
 
     public void update(User user) throws Exception {
-        if (StringUtils.isEmpty(user.getName())) {
-            throw new Exception("Name is required");
-        }
-        if (StringUtils.isEmpty(user.getEmail())) {
-            throw new Exception("Email is required");
-        }
         if (!existsById(user.getId())) {
             throw new Exception("Cannot find User with id: " + user.getId());
         }
