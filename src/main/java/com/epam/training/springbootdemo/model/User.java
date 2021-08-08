@@ -2,9 +2,12 @@ package com.epam.training.springbootdemo.model;
 
 import com.sun.istack.NotNull;
 import lombok.*;
+import org.springframework.security.core.GrantedAuthority;
+import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
 import java.io.Serializable;
+import java.util.Collection;
 import java.util.Set;
 
 @Entity
@@ -12,7 +15,7 @@ import java.util.Set;
 @Setter
 @Table(schema = "public", name = "usr")
 @EqualsAndHashCode(of = {"email"}) @ToString
-public class User implements Serializable {
+public class User implements Serializable, UserDetails {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -35,4 +38,29 @@ public class User implements Serializable {
     private boolean active;
     private String phone;
     private String address;
+
+    @Override
+    public Collection<? extends GrantedAuthority> getAuthorities() {
+        return getRoles();
+    }
+
+    @Override
+    public boolean isAccountNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isAccountNonLocked() {
+        return true;
+    }
+
+    @Override
+    public boolean isCredentialsNonExpired() {
+        return true;
+    }
+
+    @Override
+    public boolean isEnabled() {
+        return isActive();
+    }
 }
