@@ -40,6 +40,7 @@
             <br/><br/>
             {{#allowDelete}}
                 <form action="/users/{{id}}/delete" method="POST">
+                    <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
                     Delete this user? <input type="submit" value="Yes" />
                 </form>
             {{/allowDelete}}

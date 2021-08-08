@@ -18,7 +18,7 @@
                     <td>:</td>
                     <td>{{id}}</td>
                 </tr>
-                {{/id}}
+                {{/id}}m
                 <tr>
                     <td>Name</td>
                     <td>:</td>
@@ -40,6 +40,7 @@
                     <td><input type="text" name="address" value="{{#address}}{{address}}{{/address}}" /></td>
                 </tr>
             </table>
+            <input type="hidden" name="_csrf" value="{{_csrf.token}}" />
             <input type="submit" value="{{#add}}Create{{/add}}{{^add}}Update{{/add}}" />
         </form>
         {{/user}}
