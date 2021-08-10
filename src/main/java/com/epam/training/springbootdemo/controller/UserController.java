@@ -1,7 +1,6 @@
 package com.epam.training.springbootdemo.controller;
 
 import com.epam.training.springbootdemo.model.User;
-import com.epam.training.springbootdemo.repos.UserRepository;
 import com.epam.training.springbootdemo.service.UserService;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -9,9 +8,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
-
+import java.sql.SQLException;
 import java.util.List;
-import java.util.Map;
 
 @Controller
 @Slf4j
@@ -49,13 +47,9 @@ public class UserController {
 
     @GetMapping(value = "/users/{userId}")
     public String getUserById(Model model, @PathVariable long userId) {
-        User user = null;
-        try {
-            user = userService.findById(userId);
-            model.addAttribute("allowDelete", false);
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
-        }
+        User user = userService.findById(userId);
+        model.addAttribute("allowDelete", false);
+
         model.addAttribute("user", user);
         return "user";
     }
@@ -69,78 +63,49 @@ public class UserController {
         return "user-edit";
     }
 
+    @ExceptionHandler(SQLException.class)
     @PostMapping(value = "/users/add")
     public String addUser(Model model,
                           @ModelAttribute("user") User user) {
-        try {
-            User newUser = userService.save(user);
-            return "redirect:/users/" + newUser.getId();
-        } catch (Exception ex) {
-            String errorMessage = ex.getMessage();
-            log.error(errorMessage);
-            model.addAttribute("errorMessage", errorMessage);
-
-            model.addAttribute("add", true);
-            return "user-edit";
-        }
+        User newUser = userService.save(user);
+        return "redirect:/users/" + newUser.getId();
     }
 
+    @ExceptionHandler(SQLException.class)
     @GetMapping(value = {"/users/{userId}/edit"})
     public String showEditUser(Model model, @PathVariable long userId) {
-        User user = null;
-        try {
-            user = userService.findById(userId);
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
-        }
+        User user = userService.findById(userId);
+
         model.addAttribute("add", false);
         model.addAttribute("user", user);
         return "user-edit";
     }
 
+    @ExceptionHandler(SQLException.class)
     @PostMapping(value = {"/users/{userId}/edit"})
     public String updateUser(Model model,
                              @PathVariable long userId,
                              @ModelAttribute("user") User user) {
-        try {
-            user.setId(userId);
-            userService.update(user);
-            return "redirect:/users/" + user.getId();
-        } catch (Exception ex) {
-            String errorMessage = ex.getMessage();
-            log.error(errorMessage);
-            model.addAttribute("errorMessage", errorMessage);
-
-            model.addAttribute("add", false);
-            return "user-edit";
-        }
+        user.setId(userId);
+        userService.update(user);
+        return "redirect:/users/" + user.getId();
     }
 
     @GetMapping(value = {"/users/{userId}/delete"})
     public String showDeleteUser(
             Model model, @PathVariable long userId) {
-        User user = null;
-        try {
-            user = userService.findById(userId);
-        } catch (Exception ex) {
-            model.addAttribute("errorMessage", ex.getMessage());
-        }
+        User user = userService.findById(userId);
         model.addAttribute("allowDelete", true);
         model.addAttribute("user", user);
         return "user";
     }
 
+    @ExceptionHandler(SQLException.class)
     @PostMapping(value = {"/users/{userId}/delete"})
     public String deleteUserById(
             Model model, @PathVariable long userId) {
-        try {
-            userService.deleteById(userId);
-            return "redirect:/users";
-        } catch (Exception ex) {
-            String errorMessage = ex.getMessage();
-            log.error(errorMessage);
-            model.addAttribute("errorMessage", errorMessage);
-            return "user";
-        }
+        userService.deleteById(userId);
+        return "redirect:/users";
+
     }
 }

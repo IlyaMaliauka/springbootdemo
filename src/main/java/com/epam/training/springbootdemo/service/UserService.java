@@ -1,8 +1,5 @@
 package com.epam.training.springbootdemo.service;
 
-import java.util.ArrayList;
-import java.util.List;
-
 import com.epam.training.springbootdemo.model.User;
 import com.epam.training.springbootdemo.repos.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -13,6 +10,9 @@ import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.stereotype.Service;
+
+import java.util.ArrayList;
+import java.util.List;
 
 @Service
 public class UserService implements UserDetailsService {
@@ -36,27 +36,16 @@ public class UserService implements UserDetailsService {
         return users;
     }
 
-    public User save(User user) throws Exception {
-        if (user.getId() != null && existsById(user.getId())) {
-            throw new Exception("User with id: " + user.getId() + " already exists");
-        }
+    public User save(User user) {
         return userRepository.save(user);
     }
 
-    public void update(User user) throws Exception {
-        if (!existsById(user.getId())) {
-            throw new Exception("Cannot find User with id: " + user.getId());
-        }
+    public void update(User user) {
         userRepository.save(user);
     }
 
-    public void deleteById(Long id) throws Exception {
-        if (!existsById(id)) {
-            throw new Exception("Cannot find User with id: " + id);
-        }
-        else {
-            userRepository.deleteById(id);
-        }
+    public void deleteById(Long id) {
+        userRepository.deleteById(id);
     }
 
     public Long count() {
